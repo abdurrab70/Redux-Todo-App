@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { STATUS_LABEL, TASK_STATUS } from "@/redux/features/tasks/tasks.constant.ts";
 
 export function TaskFormDialog({ open, mode, onClose }) {
   const { register, handleSubmit, control } = useForm();
@@ -77,6 +78,13 @@ export function TaskFormDialog({ open, mode, onClose }) {
                     <SelectTrigger>
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
+                    <SelectContent> {TASK_STATUS.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {STATUS_LABEL[status]}
+                      </SelectItem>
+                    )
+                    )}
+                    </SelectContent>
                   </Select>
                 )}
               />
