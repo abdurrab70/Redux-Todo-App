@@ -38,7 +38,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-muted/40">
+    <div className="min-h-screen bg-slate-100">
       <main className="container mx-auto max-w-3xl px-4 py-8 space-y-5">
         <header className="flex items-center justify-between gap-3">
           <div>
