@@ -1,23 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+import type { TInitialState } from "./tasks.type";
 
-interface initialState{
-    name: string;
-    description: string;
-    priority: string;
-    status: string;
-}
-
-const initialState = {
-    name: "",
-    description: "",
-    priority: "medium",
-    status: "pending",
-}
+const initialState: TInitialState = [];
 
 const tasksSlice = createSlice({
-    name: 'tasks',
-    initialState,
-    reducers: {},
+  name: "tasks",
+  initialState,
+  reducers: {
+    addTask: (state, action) => {
+      state.push(action.payload);
+    },
+  },
 });
 
+export const { addTask } = tasksSlice.actions;
 export default tasksSlice.reducer;

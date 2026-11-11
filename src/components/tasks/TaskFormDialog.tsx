@@ -11,14 +11,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { STATUS_LABEL, TASK_STATUS } from "@/redux/features/tasks/tasks.constant.ts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  PRIORITY_LABEL,
+  STATUS_LABEL,
+  TASK_PRIORITIES,
+  TASK_STATUS,
+} from "@/redux/features/tasks/tasks.constant.ts";
+import { useAppDispatch } from "@/redux/hooks";
+import { addTask } from "@/redux/features/tasks/tasks.slice.ts";
 
 export function TaskFormDialog({ open, mode, onClose }) {
   const { register, handleSubmit, control } = useForm();
+  const appDispatch = useAppDispatch();
 
   const onSubmit = (values) => {
     console.log(values);
+    appDispatch(addTask(values));
     onClose();
   };
 
@@ -78,12 +93,13 @@ export function TaskFormDialog({ open, mode, onClose }) {
                     <SelectTrigger>
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
-                    <SelectContent> {TASK_STATUS.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {STATUS_LABEL[status]}
-                      </SelectItem>
-                    )
-                    )}
+                    <SelectContent>
+                      {" "}
+                      {TASK_STATUS.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {STATUS_LABEL[status]}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -100,6 +116,14 @@ export function TaskFormDialog({ open, mode, onClose }) {
                     <SelectTrigger>
                       <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
+                    <SelectContent>
+                      {" "}
+                      {TASK_PRIORITIES.map((priority) => (
+                        <SelectItem key={priority} value={priority}>
+                          {PRIORITY_LABEL[priority]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 )}
               />
