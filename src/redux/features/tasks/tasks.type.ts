@@ -11,4 +11,11 @@ export interface ITask {
   updatedAt: number;
 }
 
+export interface ITaskInput {
+  title: string;
+  description: string;
+  priority: TTaskPriority;
+  status: TTaskStatus;
+}
+
 export type TInitialState = ITask[];

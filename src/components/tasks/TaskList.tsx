@@ -4,7 +4,11 @@ import { selectAllTasks, selectTotalTasks } from "@/redux/features/tasks/tasks.s
 import { useAppSelector } from "@/redux/hooks";
 import { ClipboardListIcon, FilterIcon } from "lucide-react";
 
-export function TaskList({ onEdit }) {
+interface IProps {
+  onEdit: (id: string) => void;
+}
+
+export function TaskList({ onEdit }: IProps) {
 
   const tasks = useAppSelector(selectAllTasks);
   const total = useAppSelector(selectTotalTasks);

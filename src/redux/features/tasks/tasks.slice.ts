@@ -1,5 +1,10 @@
 import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
-import type { ITask, TInitialState } from "./tasks.type";
+import type {
+  ITask,
+  ITaskInput,
+  TInitialState,
+  TTaskStatus,
+} from "./tasks.type";
 
 const initialState: TInitialState = [];
 
@@ -8,9 +13,7 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     addTask: {
-      prepare: (
-        input: Pick<ITask, "title" | "description" | "status" | "priority">,
-      ) => {
+      prepare: (input: ITaskInput) => {
         const task = {
           id: nanoid(),
           title: input.title.trim(),
@@ -22,12 +25,48 @@ const tasksSlice = createSlice({
         };
         return { payload: task };
       },
+
+      //if prepare is done then reducer
       reducer: (state, action: PayloadAction<ITask>) => {
         state.push(action.payload);
       },
     },
+
+    //task update
+    updateTask: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        change: ITaskInput;
+      }>,
+    ) => {
+      const { id, change } = action.payload;
+      const task = state.find((item) => item.id === id);
+      if (!task) return;
+      Object.assign(task, change, { updateAt: Date.now() });
+    },
+
+    //update status
+    updateStatus: (
+      state,
+      action: PayloadAction<{ id: string; status: TTaskStatus }>,
+    ) => {
+      const { id, status } = action.payload;
+      const task = state.find((item) => item.id === id);
+      if (!task) return;
+      task.status = status;
+      task.updatedAt = Date.now();
+    },
+
+    //Remove task
+    removeTask: (state, action: PayloadAction<string>) => {
+      const task = state.find((item) => item.id === action.payload);
+      if (!task) return;
+      return state.filter((item) => item.id !== task.id);
+    },
   },
 });
 
-export const { addTask } = tasksSlice.actions;
+export const { addTask, updateTask, updateStatus, removeTask } =
+  tasksSlice.actions;
 export default tasksSlice.reducer;

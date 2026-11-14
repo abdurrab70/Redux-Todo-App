@@ -24,16 +24,57 @@ import {
   TASK_PRIORITIES,
   TASK_STATUS,
 } from "@/redux/features/tasks/tasks.constant.ts";
-import { useAppDispatch } from "@/redux/hooks";
-import { addTask } from "@/redux/features/tasks/tasks.slice.ts";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addTask, updateTask } from "@/redux/features/tasks/tasks.slice.ts";
+import type { RootState } from "@/redux/store";
+import { selectTaskById } from "@/redux/features/tasks/tasks.selector";
+import { useEffect } from "react";
+import { taskFromDefaultValue, type ITaskInput } from "@/redux/features/tasks";
+import { toast } from "sonner";
 
-export function TaskFormDialog({ open, mode, onClose }) {
-  const { register, handleSubmit, control } = useForm();
+type TDialogMode = "edit" | "create";
+
+interface IProps {
+  open: boolean;
+  mode: TDialogMode;
+  onClose: () => void;
+  editingId: string | null;
+}
+
+export function TaskFormDialog({ open, mode, onClose, editingId }: IProps) {
+  const { register, handleSubmit, control, reset } = useForm<ITaskInput>();
   const appDispatch = useAppDispatch();
 
-  const onSubmit = (values) => {
-    console.log(values);
-    appDispatch(addTask(values));
+  const editing = useAppSelector((state: RootState) =>
+    editingId ? selectTaskById(state, editingId) : undefined,
+  );
+  //console.log(editing);
+
+  useEffect(() => {
+    if (!open) return;
+    if (mode === "edit" && editing) {
+      reset({
+        title: editing.title,
+        description: editing.description,
+        status: editing.status,
+        priority: editing.priority,
+      });
+    } else {
+      reset(taskFromDefaultValue);
+    }
+  }, [editing, mode, open, reset]);
+
+  const onSubmit = (values: ITaskInput) => {
+    //console.log(values);
+    if(mode === "edit" && editing){
+      appDispatch(updateTask({id: editing.id, change: values}));
+      toast.success("Task Updated Successfully!");
+      
+    }else{
+      
+      appDispatch(addTask(values));
+      toast.success("Task Created Successfully!");
+    }
     onClose();
   };
 

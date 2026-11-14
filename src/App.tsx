@@ -3,14 +3,13 @@ import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { TaskList } from "@/components/tasks/TaskList";
-import {
-  TaskFormDialog,
-  type DialogMode,
-} from "@/components/tasks/TaskFormDialog";
+import { TaskFormDialog } from "@/components/tasks/TaskFormDialog";
 import { TaskStats } from "@/components/tasks/TaskStats";
 import { FiltersBar } from "@/components/filters/FiltersBar";
 
-interface DialogState {
+export type DialogMode = "create" | "edit";
+
+export interface DialogState {
   open: boolean;
   mode: DialogMode;
   editingId: string | null;
@@ -38,7 +37,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-mist-200">
       <main className="container mx-auto max-w-3xl px-4 py-8 space-y-5">
         <header className="flex items-center justify-between gap-3">
           <div>
